@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <title>Allergy card · Listwell</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .card { background: var(--surface); border: 2px solid var(--accent); border-radius: 22px; padding: 24px; max-width: 560px; margin: 24px auto; }
+    .who { display: flex; gap: 14px; align-items: center; }
+    .who .emoji { font-size: 52px; }
+    .who h1 { margin: 0; font-size: 30px; }
+    .who p { margin: 2px 0 0; color: var(--muted); }
+    .cant { font-weight: 700; font-size: 20px; margin: 20px 0 8px; }
+    ul.allergens { list-style: none; padding: 0; margin: 0; font-size: 20px; }
+    ul.allergens li { padding: 6px 0; border-bottom: 1px solid var(--rule); }
+    .traces { margin-top: 14px; }
+    .traces.strong { color: var(--poor); font-weight: 700; }
+    .note { margin-top: 14px; padding: 10px 12px; background: var(--sunken); border-radius: 12px; }
+    .thanks { font-weight: 700; margin-top: 18px; font-size: 18px; }
+    .bar { max-width: 560px; margin: 16px auto; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 0 4px; }
+    .bar select { font-size: 16px; padding: 6px 8px; border-radius: 10px; }
+    .actions { max-width: 560px; margin: 0 auto 40px; display: flex; gap: 10px; flex-wrap: wrap; padding: 0 4px; }
+    .actions a { flex: 1 1 200px; text-align: center; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 600; }
+    .actions a.primary { background: var(--accent); color: var(--on-accent); }
+    .actions a.secondary { border: 1px solid var(--accent); color: var(--accent-ink); }
+    .footer { color: var(--muted); font-size: 13px; margin-top: 14px; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="bar">
+      <strong>Listwell</strong>
+      <label><span id="langLabel">Language</span>
+        <select id="lang"></select>
+      </label>
+    </div>
+    <div id="card" class="card hidden"></div>
+    <div id="error" class="card hidden"></div>
+    <div class="actions">
+      <a id="open" class="primary hidden" href="#">Open in Listwell</a>
+      <a id="get" class="secondary" href="https://apps.apple.com/app/id6823327229">Get Listwell</a>
+    </div>
+  </main>
+  <script>
+  // Everything happens on this page: the card is in the part of the link after "#", which is never sent anywhere.
+  const D = {"t": {"languages": ["en", "ro", "fr", "de", "it", "es"], "languageNames": {"en": "English", "ro": "Română", "fr": "Français", "de": "Deutsch", "it": "Italiano", "es": "Español"}, "strings": {"en": {"title": "My food allergies", "cantEat": "I can't eat:", "tracesAvoid": "Even traces are a problem for me. Please check “may contain” warnings.", "tracesOK": "Traces (“may contain”) are usually OK for me.", "vegan": "Vegan diet: no meat, fish, milk, eggs or honey.", "vegetarian": "Vegetarian diet: no meat or fish.", "palmOilFree": "I avoid palm oil.", "none": "I have no food restrictions.", "thanks": "Please check the ingredients. Thank you!", "note": "Note", "footer": "Allergy card made with Listwell", "allergens": {"gluten": "Gluten (wheat, rye, barley, oats)", "crustaceans": "Crustaceans (shrimp, crab, lobster)", "eggs": "Eggs", "fish": "Fish", "peanuts": "Peanuts", "soybeans": "Soy", "milk": "Milk (including lactose)", "nuts": "Tree nuts (almonds, hazelnuts, walnuts, cashews…)", "celery": "Celery", "mustard": "Mustard", "sesame": "Sesame", "sulphites": "Sulphites", "lupin": "Lupin", "molluscs": "Molluscs (mussels, squid, snails)"}}, "ro": {"title": "Alergiile mele alimentare", "cantEat": "Nu pot mânca:", "tracesAvoid": "Chiar și urmele sunt o problemă pentru mine. Vă rog verificați mențiunile „poate conține”.", "tracesOK": "Urmele („poate conține”) sunt de obicei în regulă pentru mine.", "vegan": "Dietă vegană: fără carne, pește, lapte, ouă sau miere.", "vegetarian": "Dietă vegetariană: fără carne sau pește.", "palmOilFree": "Evit uleiul de palmier.", "none": "Nu am restricții alimentare.", "thanks": "Vă rog verificați ingredientele. Mulțumesc!", "note": "Notă", "footer": "Card de alergii creat cu Listwell", "allergens": {"gluten": "Gluten (grâu, secară, orz, ovăz)", "crustaceans": "Crustacee (creveți, crab, homar)", "eggs": "Ouă", "fish": "Pește", "peanuts": "Arahide", "soybeans": "Soia", "milk": "Lapte (inclusiv lactoză)", "nuts": "Fructe cu coajă lemnoasă (migdale, alune, nuci, caju…)", "celery": "Țelină", "mustard": "Muștar", "sesame": "Susan", "sulphites": "Sulfiți", "lupin": "Lupin", "molluscs": "Moluște (midii, calmar, melci)"}}, "fr": {"title": "Mes allergies alimentaires", "cantEat": "Je ne peux pas manger :", "tracesAvoid": "Même des traces me posent problème. Merci de vérifier les mentions « peut contenir ».", "tracesOK": "Les traces (« peut contenir ») me conviennent généralement.", "vegan": "Régime végan : ni viande, ni poisson, ni lait, ni œufs, ni miel.", "vegetarian": "Régime végétarien : ni viande ni poisson.", "palmOilFree": "J’évite l’huile de palme.", "none": "Je n’ai aucune restriction alimentaire.", "thanks": "Merci de vérifier les ingrédients. Merci beaucoup !", "note": "Remarque", "footer": "Carte d’allergies créée avec Listwell", "allergens": {"gluten": "Gluten (blé, seigle, orge, avoine)", "crustaceans": "Crustacés (crevettes, crabe, homard)", "eggs": "Œufs", "fish": "Poisson", "peanuts": "Arachides (cacahuètes)", "soybeans": "Soja", "milk": "Lait (y compris le lactose)", "nuts": "Fruits à coque (amandes, noisettes, noix, cajou…)", "celery": "Céleri", "mustard": "Moutarde", "sesame": "Sésame", "sulphites": "Sulfites", "lupin": "Lupin", "molluscs": "Mollusques (moules, calmar, escargots)"}}, "de": {"title": "Meine Lebensmittelallergien", "cantEat": "Ich darf nicht essen:", "tracesAvoid": "Schon Spuren sind für mich ein Problem. Bitte auf „kann Spuren enthalten“ achten.", "tracesOK": "Spuren („kann Spuren enthalten“) sind für mich meist in Ordnung.", "vegan": "Vegane Ernährung: kein Fleisch, kein Fisch, keine Milch, keine Eier, kein Honig.", "vegetarian": "Vegetarische Ernährung: kein Fleisch und kein Fisch.", "palmOilFree": "Ich vermeide Palmöl.", "none": "Ich habe keine Einschränkungen beim Essen.", "thanks": "Bitte prüfen Sie die Zutaten. Vielen Dank!", "note": "Hinweis", "footer": "Allergiekarte erstellt mit Listwell", "allergens": {"gluten": "Gluten (Weizen, Roggen, Gerste, Hafer)", "crustaceans": "Krebstiere (Garnelen, Krabben, Hummer)", "eggs": "Eier", "fish": "Fisch", "peanuts": "Erdnüsse", "soybeans": "Soja", "milk": "Milch (einschließlich Laktose)", "nuts": "Schalenfrüchte (Mandeln, Haselnüsse, Walnüsse, Cashews…)", "celery": "Sellerie", "mustard": "Senf", "sesame": "Sesam", "sulphites": "Sulfite", "lupin": "Lupinen", "molluscs": "Weichtiere (Muscheln, Tintenfisch, Schnecken)"}}, "it": {"title": "Le mie allergie alimentari", "cantEat": "Non posso mangiare:", "tracesAvoid": "Anche le tracce sono un problema per me. Controllate le diciture «può contenere».", "tracesOK": "Le tracce («può contenere») di solito per me vanno bene.", "vegan": "Dieta vegana: niente carne, pesce, latte, uova o miele.", "vegetarian": "Dieta vegetariana: niente carne né pesce.", "palmOilFree": "Evito l’olio di palma.", "none": "Non ho restrizioni alimentari.", "thanks": "Per favore controllate gli ingredienti. Grazie!", "note": "Nota", "footer": "Scheda allergie creata con Listwell", "allergens": {"gluten": "Glutine (frumento, segale, orzo, avena)", "crustaceans": "Crostacei (gamberi, granchi, astice)", "eggs": "Uova", "fish": "Pesce", "peanuts": "Arachidi", "soybeans": "Soia", "milk": "Latte (incluso il lattosio)", "nuts": "Frutta a guscio (mandorle, nocciole, noci, anacardi…)", "celery": "Sedano", "mustard": "Senape", "sesame": "Sesamo", "sulphites": "Solfiti", "lupin": "Lupini", "molluscs": "Molluschi (cozze, calamari, lumache)"}}, "es": {"title": "Mis alergias alimentarias", "cantEat": "No puedo comer:", "tracesAvoid": "Incluso las trazas son un problema para mí. Revisen los avisos «puede contener».", "tracesOK": "Las trazas («puede contener») normalmente no me afectan.", "vegan": "Dieta vegana: sin carne, pescado, leche, huevos ni miel.", "vegetarian": "Dieta vegetariana: sin carne ni pescado.", "palmOilFree": "Evito el aceite de palma.", "none": "No tengo restricciones alimentarias.", "thanks": "Por favor, revisen los ingredientes. ¡Gracias!", "note": "Nota", "footer": "Tarjeta de alergias creada con Listwell", "allergens": {"gluten": "Gluten (trigo, centeno, cebada, avena)", "crustaceans": "Crustáceos (gambas, cangrejo, langosta)", "eggs": "Huevos", "fish": "Pescado", "peanuts": "Cacahuetes", "soybeans": "Soja", "milk": "Leche (incluida la lactosa)", "nuts": "Frutos de cáscara (almendras, avellanas, nueces, anacardos…)", "celery": "Apio", "mustard": "Mostaza", "sesame": "Sésamo", "sulphites": "Sulfitos", "lupin": "Altramuces", "molluscs": "Moluscos (mejillones, calamares, caracoles)"}}}}, "ui": {"en": {"open": "Open in Listwell", "get": "Get Listwell", "invalid": "This card link is damaged or incomplete. Ask for it again.", "language": "Language"}, "ro": {"open": "Deschide în Listwell", "get": "Descarcă Listwell", "invalid": "Linkul cardului este deteriorat sau incomplet. Cere-l din nou.", "language": "Limba"}, "fr": {"open": "Ouvrir dans Listwell", "get": "Obtenir Listwell", "invalid": "Ce lien de carte est abîmé ou incomplet. Demandez-le à nouveau.", "language": "Langue"}, "de": {"open": "In Listwell öffnen", "get": "Listwell laden", "invalid": "Dieser Kartenlink ist beschädigt oder unvollständig.", "language": "Sprache"}, "it": {"open": "Apri in Listwell", "get": "Scarica Listwell", "invalid": "Questo link è danneggiato o incompleto.", "language": "Lingua"}, "es": {"open": "Abrir en Listwell", "get": "Descargar Listwell", "invalid": "Este enlace está dañado o incompleto.", "language": "Idioma"}}, "emoji": {"gluten": "🌾", "crustaceans": "🦐", "eggs": "🥚", "fish": "🐟", "peanuts": "🥜", "soybeans": "🫘", "milk": "🥛", "nuts": "🌰", "celery": "🥬", "mustard": "🟡", "sesame": "⚪️", "sulphites": "🍷", "lupin": "🌼", "molluscs": "🦪"}, "dietEmoji": {"vegan": "🌱", "vegetarian": "🥗", "palmOilFree": "🌴"}, "order": ["gluten", "crustaceans", "eggs", "fish", "peanuts", "soybeans", "milk", "nuts", "celery", "mustard", "sesame", "sulphites", "lupin", "molluscs"]};
+  const $ = (id) => document.getElementById(id);
+  function decode(fragment) {
+    if (!fragment.startsWith("c1.") || fragment.length > 2048) return null;
+    try {
+      let b = fragment.slice(3).replace(/-/g, "+").replace(/_/g, "/");
+      while (b.length % 4) b += "=";
+      const bytes = Uint8Array.from(atob(b), (c) => c.charCodeAt(0));
+      const card = JSON.parse(new TextDecoder().decode(bytes));
+      if (card.v !== 1 || typeof card.n !== "string" || !card.n.trim()) return null;
+      return card;
+    } catch (e) { return null; }
+  }
+  function text(tag, content, cls) {
+    const el = document.createElement(tag);
+    el.textContent = content;
+    if (cls) el.className = cls;
+    return el;
+  }
+  function render(card, lang) {
+    const s = D.t.strings[lang] || D.t.strings.en;
+    const ui = D.ui[lang] || D.ui.en;
+    document.documentElement.lang = lang;
+    $("langLabel").textContent = ui.language;
+    $("open").textContent = ui.open;
+    $("get").textContent = ui.get;
+    if (!card) {
+      $("card").classList.add("hidden");
+      $("open").classList.add("hidden");
+      const err = $("error");
+      err.replaceChildren(text("p", ui.invalid));
+      err.classList.remove("hidden");
+      return;
+    }
+    const root = $("card");
+    root.replaceChildren();
+    const who = document.createElement("div");
+    who.className = "who";
+    who.append(text("div", (card.e || "🙂").slice(0, 8), "emoji"));
+    const names = document.createElement("div");
+    names.append(text("h1", card.n.slice(0, 40)), text("p", s.title));
+    who.append(names);
+    root.append(who);
+    const allergens = D.order.filter((code) => (card.a || []).includes(code));
+    const diets = (card.d || []).filter((d) => s[d] && !(d === "vegetarian" && (card.d || []).includes("vegan")));
+    if (!allergens.length && !diets.length) root.append(text("p", s.none, "cant"));
+    if (allergens.length) {
+      root.append(text("div", s.cantEat, "cant"));
+      const ul = document.createElement("ul");
+      ul.className = "allergens";
+      allergens.forEach((code) => ul.append(text("li", D.emoji[code] + "  " + (s.allergens[code] || code))));
+      root.append(ul);
+      root.append(text("p", card.t ? s.tracesAvoid : s.tracesOK, card.t ? "traces strong" : "traces"));
+    }
+    diets.forEach((d) => root.append(text("p", D.dietEmoji[d] + "  " + s[d])));
+    if (card.m) {
+      const note = document.createElement("div");
+      note.className = "note";
+      note.append(text("strong", s.note + ": "), text("span", String(card.m).slice(0, 140)));
+      root.append(note);
+    }
+    root.append(text("p", s.thanks, "thanks"), text("p", s.footer, "footer"));
+    root.classList.remove("hidden");
+    $("error").classList.add("hidden");
+    const open = $("open");
+    open.href = "listwell://card#" + location.hash.slice(1);
+    open.classList.remove("hidden");
+  }
+  const languages = D.t.languages;
+  const preferred = (navigator.languages || [navigator.language || "en"]).map((l) => l.slice(0, 2));
+  let lang = preferred.find((l) => languages.includes(l)) || "en";
+  const select = $("lang");
+  languages.forEach((code) => {
+    const option = document.createElement("option");
+    option.value = code;
+    option.textContent = D.t.languageNames[code];
+    select.append(option);
+  });
+  select.value = lang;
+  const show = () => render(decode(decodeURIComponent(location.hash.slice(1))), select.value);
+  select.addEventListener("change", show);
+  window.addEventListener("hashchange", show);
+  show();
+  </script>
+</body>
+</html>
