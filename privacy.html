@@ -41,9 +41,11 @@
         <li><strong>household profiles</strong> — names you choose, allergies, intolerances and diets. This can be health information, so it never leaves the device</li>
         <li>products you scanned and the label data Listwell fetched for them</li>
         <li>receipts you scanned: the photo is read on the device and only the text lines, prices and totals are kept</li>
+        <li><strong>label photos</strong>: an ingredients photo is read on the device; the photo isn't kept, only what was read (the ingredient text and the allergens found), saved for that barcode</li>
+        <li><strong>guests</strong>: allergy cards you received and saved</li>
         <li>your settings, such as the app language</li>
       </ul>
-      <p>Reading receipts uses Apple's on-device Vision framework. Voice input uses Apple's speech recognition — on the device when your iPhone supports it, otherwise Apple processes the audio under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>. We never receive it.</p>
+      <p>Reading receipts and labels uses Apple's on-device Vision framework. On iPhones with Apple Intelligence, the text of a label can also be checked by Apple's on-device language model; it stays on the iPhone. Voice input uses Apple's speech recognition — on the device when your iPhone supports it, otherwise Apple processes the audio under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>. We never receive it.</p>
       <p>The widget reads a short summary of your current list from a folder only Listwell and its widget can access. Data is included in your iPhone or iCloud backups according to your iOS settings.</p>
     </section>
 
@@ -55,11 +57,14 @@
           <tbody>
             <tr><td>The product's barcode number is sent to look up its name, ingredients, allergens and Nutri-Score</td><td>You scan or type a barcode</td><td><a href="https://world.openfoodfacts.org/privacy">Open Food Facts</a>, a non-profit open database</td></tr>
             <tr><td>The product photo is loaded</td><td>You view a product's details</td><td>Open Food Facts</td></tr>
+            <tr><td>The label photo and the ingredient text you read are sent, to be published on Open Food Facts under its open licences</td><td>Only if you turn on “Share with Open Food Facts” and confirm, each time</td><td>Open Food Facts</td></tr>
             <tr><td>A web page opens in Safari</td><td>You tap a link (e.g. “View or correct on Open Food Facts”)</td><td>That website</td></tr>
           </tbody>
         </table>
       </div>
-      <p>Only the barcode is sent — never your profiles, allergies or lists. Like any web request, Open Food Facts sees your IP address and the app name and version.</p>
+      <h3>Allergy cards</h3>
+      <p>When you share an allergy card, the person's name, emoji, allergies, diets and note are written <em>into the link itself</em>, after the “#”. Browsers never send that part of a link to a server, so the card page (<span class="path">iliescub.github.io/listwell-legal/card/</span>) shows the card using a small script on the page, with no network requests, cookies or analytics. A card goes only where you send it, and anyone with the link can read it — share it like any personal message.</p>
+      <p>Apart from what you choose to share, only the barcode is sent — never your profiles, allergies or lists. Like any web request, Open Food Facts sees your IP address and the app name and version.</p>
     </section>
 
     <section id="never">
@@ -67,7 +72,7 @@
       <ul>
         <li>Require an account or collect your name, email address or phone number</li>
         <li>Show ads or include advertising, analytics or crash-reporting SDKs</li>
-        <li>Send your household's allergies or diets anywhere</li>
+        <li>Send your household's allergies or diets anywhere, unless you share an allergy card yourself</li>
         <li>Track you across other companies' apps or websites, or sell or share personal information</li>
         <li>Access your location, contacts or photo library (receipt photos you pick go through Apple's picker)</li>
       </ul>
@@ -77,7 +82,7 @@
     <section id="permissions">
       <h2>Permissions</h2>
       <ul>
-        <li><strong>Camera.</strong> To scan barcodes and receipts, only while the scanner is open.</li>
+        <li><strong>Camera.</strong> To scan barcodes, receipts, ingredient labels and card QR codes, only while the scanner is open.</li>
         <li><strong>Microphone and Speech Recognition.</strong> Only when you tap the microphone to dictate an item.</li>
       </ul>
     </section>
